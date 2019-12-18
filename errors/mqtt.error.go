@@ -12,6 +12,10 @@ func (c Code) New(msg string, args ...interface{}) *MqttError {
 	return NewCodedError(c).Msg(msg, args...)
 }
 
+func (c Code) NewE(e error, msg string, args ...interface{}) *MqttError {
+	return NewCodedError(c).Msg(msg, args...).Attach(e)
+}
+
 // Register register a code and its token string for using later
 func (c Code) Register(codeName string) (errno Code) {
 	return Code(errors.Code(c).Register(codeName))
@@ -53,12 +57,12 @@ const (
 )
 
 var (
-	// ErrOverflow               = (ErrCodeOverflow).New("data overflow")
-	// ErrWrongState             = (ErrCodeWrongState).New("wrong state")
-	// ErrStateLoops             = (ErrCodeStateLoops).New("unconditional state migrates nested loops")
-	// ErrConnectTimeout         = (ErrCodeConnectTimeout).New("connect timeout")
-	// ErrUnauthorized           = (ErrCodeUnauthorized).New("unauthorized")
-	// ErrUnsupportProtocolLevel = (ErrCodeUnsupportedProtocolLevel).New("unsupported protocol level")
+	ErrOverflow                 = ErrCodeOverflow.New("data overflow")
+	ErrWrongState               = ErrCodeWrongState.New("wrong state")
+	ErrStateLoops               = ErrCodeStateLoops.New("unconditional state migrates nested loops")
+	ErrConnectTimeout           = ErrCodeConnectTimeout.New("connect timeout")
+	ErrUnauthorized             = ErrCodeUnauthorized.New("unauthorized")
+	ErrUnsupportedProtocolLevel = ErrCodeUnsupportedProtocolLevel.New("unsupported protocol level")
 	// ErrPacketIncomplete       = (ErrCodePacketIncomplete).New("packet incomplete")
 )
 
@@ -90,20 +94,15 @@ func init() {
 }
 
 type MqttError struct {
-	// Number  errors.Code
-	// Message string
-	// // Inner   error
-	// Inners []error // canned inner errors
 	CloseReason
 	errors.CodedErr
-}
-
-// NoCannedError detects mqttError object is not an error or not an canned-error (inners is empty)
-func (e *MqttError) NoCannedError() bool {
-	return e.CodedErr.Number() == errors.OK // || e.InnerEmpty()
 }
 
 func (e *MqttError) Reason(reason CloseReason) *MqttError {
 	e.CloseReason = reason
 	return e
+}
+
+func (e *MqttError) GetReason() CloseReason {
+	return e.CloseReason
 }

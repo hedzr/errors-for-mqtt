@@ -9,6 +9,7 @@ func _() {
 	// Re-run the stringer command to generate them again.
 	var x [1]struct{}
 	_ = x[CloseNormal-0]
+	_ = x[CloseByPeer-1]
 	_ = x[CloseUnknownError-2]
 	_ = x[CloseWithWillMessage-4]
 	_ = x[CloseUnspecifiedReason-128]
@@ -41,49 +42,47 @@ func _() {
 }
 
 const (
-	_CloseReason_name_0 = "CloseNormal"
-	_CloseReason_name_1 = "CloseUnknownError"
-	_CloseReason_name_2 = "CloseWithWillMessage"
-	_CloseReason_name_3 = "CloseUnspecifiedReasonCloseMalformedPacketCloseWrongProtocolCloseNotImplement"
-	_CloseReason_name_4 = "CloseNotAuthorized"
-	_CloseReason_name_5 = "CloseBusy"
-	_CloseReason_name_6 = "CloseClosing"
-	_CloseReason_name_7 = "CloseKeepAliveTimeout"
-	_CloseReason_name_8 = "CloseDupSessionCloseTopicNameInvalid"
-	_CloseReason_name_9 = "CloseBufferOverflowCloseTopicAliasInvalidClosePacketTooLongClosePacketRateTooFastCloseQuoteOverflowCloseAdministrativeOperateClosePayloadFormatInvalidCloseUnsupportedRetainCloseUnsupportedQoSCloseUseOtherServerCloseServerMovedPermanentCloseUnsupportedSharedSubscriptionCloseConnectionMadeTooFreqCloseConnectionTimeoutCloseUnsupportedSubscriptionIdCloseUnsupportedWildcardSubscription"
+	_CloseReason_name_0 = "CloseNormalCloseByPeerCloseUnknownError"
+	_CloseReason_name_1 = "CloseWithWillMessage"
+	_CloseReason_name_2 = "CloseUnspecifiedReasonCloseMalformedPacketCloseWrongProtocolCloseNotImplement"
+	_CloseReason_name_3 = "CloseNotAuthorized"
+	_CloseReason_name_4 = "CloseBusy"
+	_CloseReason_name_5 = "CloseClosing"
+	_CloseReason_name_6 = "CloseKeepAliveTimeout"
+	_CloseReason_name_7 = "CloseDupSessionCloseTopicNameInvalid"
+	_CloseReason_name_8 = "CloseBufferOverflowCloseTopicAliasInvalidClosePacketTooLongClosePacketRateTooFastCloseQuoteOverflowCloseAdministrativeOperateClosePayloadFormatInvalidCloseUnsupportedRetainCloseUnsupportedQoSCloseUseOtherServerCloseServerMovedPermanentCloseUnsupportedSharedSubscriptionCloseConnectionMadeTooFreqCloseConnectionTimeoutCloseUnsupportedSubscriptionIdCloseUnsupportedWildcardSubscription"
 )
 
 var (
-	_CloseReason_index_3 = [...]uint8{0, 22, 42, 60, 77}
-	_CloseReason_index_8 = [...]uint8{0, 15, 36}
-	_CloseReason_index_9 = [...]uint16{0, 19, 41, 59, 81, 99, 125, 150, 172, 191, 210, 235, 269, 295, 317, 347, 383}
+	_CloseReason_index_0 = [...]uint8{0, 11, 22, 39}
+	_CloseReason_index_2 = [...]uint8{0, 22, 42, 60, 77}
+	_CloseReason_index_7 = [...]uint8{0, 15, 36}
+	_CloseReason_index_8 = [...]uint16{0, 19, 41, 59, 81, 99, 125, 150, 172, 191, 210, 235, 269, 295, 317, 347, 383}
 )
 
 func (i CloseReason) String() string {
 	switch {
-	case i == 0:
-		return _CloseReason_name_0
-	case i == 2:
-		return _CloseReason_name_1
+	case 0 <= i && i <= 2:
+		return _CloseReason_name_0[_CloseReason_index_0[i]:_CloseReason_index_0[i+1]]
 	case i == 4:
-		return _CloseReason_name_2
+		return _CloseReason_name_1
 	case 128 <= i && i <= 131:
 		i -= 128
-		return _CloseReason_name_3[_CloseReason_index_3[i]:_CloseReason_index_3[i+1]]
+		return _CloseReason_name_2[_CloseReason_index_2[i]:_CloseReason_index_2[i+1]]
 	case i == 135:
-		return _CloseReason_name_4
+		return _CloseReason_name_3
 	case i == 137:
-		return _CloseReason_name_5
+		return _CloseReason_name_4
 	case i == 139:
-		return _CloseReason_name_6
+		return _CloseReason_name_5
 	case i == 141:
-		return _CloseReason_name_7
+		return _CloseReason_name_6
 	case 143 <= i && i <= 144:
 		i -= 143
-		return _CloseReason_name_8[_CloseReason_index_8[i]:_CloseReason_index_8[i+1]]
+		return _CloseReason_name_7[_CloseReason_index_7[i]:_CloseReason_index_7[i+1]]
 	case 147 <= i && i <= 162:
 		i -= 147
-		return _CloseReason_name_9[_CloseReason_index_9[i]:_CloseReason_index_9[i+1]]
+		return _CloseReason_name_8[_CloseReason_index_8[i]:_CloseReason_index_8[i+1]]
 	default:
 		return "CloseReason(" + strconv.FormatInt(int64(i), 10) + ")"
 	}

@@ -1,4 +1,4 @@
-//go:generate go run ../../../ci/stringerex/stringerex.go -type=CloseReason -output close_reason_string.go
+//go:generate stringer -type=CloseReason -output close_reason_string.go
 
 package errors
 
@@ -6,6 +6,7 @@ type CloseReason Code
 
 const (
 	CloseNormal                          CloseReason = iota // both. 正常关闭连接.不发送遗嘱.
+	CloseByPeer                          CloseReason = 1    // both.
 	CloseUnknownError                    CloseReason = 2    // both. 未知原因的错误
 	CloseWithWillMessage                 CloseReason = 4    // client. 包含遗嘱消息的断开. 客户端希望断开但也需要服务端发布它的遗嘱消息.
 	CloseUnspecifiedReason               CloseReason = 128  // both. 未指定错误 / unspecified error reason. 连接被关闭, 但发送端不愿意透露原因, 或者没有其他适用的原因码.
@@ -74,8 +75,7 @@ func (i CloseReason) New(msg string, args ...interface{}) *MqttError {
 
 func (i CloseReason) IsValidReason() bool {
 	switch {
-	case i == 0:
-	case i == 2:
+	case 0 <= i && i <= 2:
 	case i == 4:
 	case 128 <= i && i <= 131:
 	case i == 135:
@@ -92,32 +92,58 @@ func (i CloseReason) IsValidReason() bool {
 
 func (i CloseReason) Parse(s string) CloseReason {
 	switch s {
-	case _CloseReason_name_0:
-		return 0
+	// case 0 <= i && i <= 2:
+	// 	return _CloseReason_name_0[_CloseReason_index_0[i]:_CloseReason_index_0[i+1]]
 	case _CloseReason_name_1:
-		return 2
-	case _CloseReason_name_2:
 		return 4
-	case _CloseReason_name_4:
+	// case 128 <= i && i <= 131:
+	// 	i -= 128
+	// 	return _CloseReason_name_2[_CloseReason_index_2[i]:_CloseReason_index_2[i+1]]
+	case _CloseReason_name_3:
 		return 135
-	case _CloseReason_name_5:
+	case _CloseReason_name_4:
 		return 137
-	case _CloseReason_name_6:
+	case _CloseReason_name_5:
 		return 139
-	case _CloseReason_name_7:
+	case _CloseReason_name_6:
 		return 141
+	// case 143 <= i && i <= 144:
+	// 	i -= 143
+	// 	return _CloseReason_name_7[_CloseReason_index_7[i]:_CloseReason_index_7[i+1]]
+	// case 147 <= i && i <= 162:
+	// 	i -= 147
+	// 	return _CloseReason_name_8[_CloseReason_index_8[i]:_CloseReason_index_8[i+1]]
+
 	default:
-		if c, bad := _ParseCloseReason5Uint8(s, _CloseReason_name_3, _CloseReason_index_3, 128); !bad {
+		if c, bad := _ParseCloseReason4Uint8(s, _CloseReason_name_0, _CloseReason_index_0, 0); !bad {
 			return c
 		}
-		if c, bad := _ParseCloseReason3Uint8(s, _CloseReason_name_8, _CloseReason_index_8, 143); !bad {
+		if c, bad := _ParseCloseReason5Uint8(s, _CloseReason_name_2, _CloseReason_index_2, 147); !bad {
 			return c
 		}
-		if c, bad := _ParseCloseReasonUint16(s, _CloseReason_name_9, _CloseReason_index_9, 147); !bad {
+		if c, bad := _ParseCloseReason3Uint8(s, _CloseReason_name_7, _CloseReason_index_7, 143); !bad {
+			return c
+		}
+		if c, bad := _ParseCloseReasonUint16(s, _CloseReason_name_8, _CloseReason_index_8, 147); !bad {
 			return c
 		}
 	}
 	return 0
+}
+
+func _ParseCloseReason4Uint8(s string, _m string, _i [4]uint8, base CloseReason) (c CloseReason, bad bool) {
+	for t := 0; t < len(_i); t++ {
+		b := _i[t]
+		e := len(_m)
+		if t < len(_i)-1 {
+			e = int(_i[t+1])
+		}
+		n := _m[b:e]
+		if n == s {
+			return CloseReason(t + int(base)), false
+		}
+	}
+	return 0, true
 }
 
 func _ParseCloseReason5Uint8(s string, _m string, _i [5]uint8, base CloseReason) (c CloseReason, bad bool) {

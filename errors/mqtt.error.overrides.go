@@ -7,6 +7,16 @@ import (
 	"strings"
 )
 
+// NoCannedError detects mqttError object is not an error or not an canned-error (inners is empty)
+func (e *MqttError) NoCannedError() bool {
+	return e.Number() == OK || e.InnerEmpty()
+}
+
+// InnerEmpty tests if any errors attached (nor nested) to `e` or not
+func (e *MqttError) InnerEmpty() bool {
+	return len(e.GetErrs()) == 0
+}
+
 // Code put another code into CodedErr
 func (e *MqttError) Code(code Code) *MqttError {
 	_ = e.CodedErr.Code(errors.Code(code))
@@ -51,6 +61,26 @@ func (e *MqttError) Number() Code {
 	return Code(e.CodedErr.Number())
 }
 
+//
+func (e *MqttError) IsBoth(code ...Code) bool {
+	for _, c := range code {
+		if !e.EqualRecursive(c) {
+			return false
+		}
+	}
+	return true
+}
+
+//
+func (e *MqttError) IsAny(code ...Code) bool {
+	for _, c := range code {
+		if e.EqualRecursive(c) {
+			return true
+		}
+	}
+	return false
+}
+
 func (e *MqttError) Error() string {
 	var b strings.Builder
 	strings.Repeat(" ", 32)
@@ -91,7 +121,7 @@ func (e *MqttError) Msg(msg string, args ...interface{}) *MqttError {
 //
 // Note that `ExtErr.Template()` had been overridden here
 func (e *MqttError) Attach(errors ...error) *MqttError {
-	_ = e.CodedErr.Attach(errors...)
+	e.CodedErr.AttachIts(errors...)
 	return e
 }
 
@@ -99,6 +129,16 @@ func (e *MqttError) Attach(errors ...error) *MqttError {
 //
 // Note that `ExtErr.Template()` had been overridden here
 func (e *MqttError) Nest(errors ...error) *MqttError {
-	_ = e.CodedErr.Nest(errors...)
+	e.CodedErr.NestIts(errors...)
 	return e
+}
+
+// AttachIts attaches the nested errors into CodedErr
+func (e *MqttError) AttachIts(errors ...error) {
+	e.CodedErr.AttachIts(errors...)
+}
+
+// NestIts attaches the nested errors into CodedErr
+func (e *MqttError) NestIts(errors ...error) {
+	e.CodedErr.NestIts(errors...)
 }
