@@ -1,6 +1,9 @@
 package errors
 
-import "github.com/hedzr/errors"
+import (
+	"github.com/hedzr/errors"
+	"strings"
+)
 
 //
 //
@@ -47,36 +50,6 @@ func Unwrap(err error) error {
 	return u.Unwrap()
 }
 
-// CanWalk tests if err is walkable
-func CanWalk(err error) (ok bool) {
-	_, ok = err.(errors.Walkable)
-	return
-}
-
-// CanRange tests if err is range-able
-func CanRange(err error) (ok bool) {
-	_, ok = err.(errors.Ranged)
-	return
-}
-
-// CanUnwrap tests if err is unwrap-able
-func CanUnwrap(err error) (ok bool) {
-	_, ok = err.(interface{ Unwrap() error })
-	return
-}
-
-// CanIs tests if err is is-able
-func CanIs(err error) (ok bool) {
-	_, ok = err.(interface{ Is(error) bool })
-	return
-}
-
-// CanAs tests if err is as-able
-func CanAs(err error) (ok bool) {
-	_, ok = err.(interface{ As(interface{}) bool })
-	return
-}
-
 // Walk will walk all inner and nested error objects inside err
 func Walk(err error, fn func(err error) (stop bool)) {
 	if !fn(err) {
@@ -117,6 +90,11 @@ func IsBoth(err error, code ...Code) bool {
 		return x.IsBoth(code...)
 	}
 	return false
+}
+
+// TextContains test if a text fragment is included by err
+func TextContains(err error, text string) bool {
+	return strings.Index(err.Error(), text) >= 0
 }
 
 // Attach attaches the nested errors into CodedErr

@@ -7,6 +7,7 @@ import (
 	"syscall"
 )
 
+// IsMqttCaredNetError checks an error object and ignore the unimportants
 func IsMqttCaredNetError(err error) bool {
 	netErr, ok := err.(net.Error)
 	if !ok {
