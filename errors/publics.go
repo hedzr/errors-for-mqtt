@@ -115,7 +115,7 @@ func Nest(err error, errs ...error) error {
 
 // DumpStacksAsString returns stack tracing information like debug.PrintStack()
 func DumpStacksAsString(allRoutines bool) string {
-	return errors.DumpStackAsString(allRoutines)
+	return errors.DumpStacksAsString(allRoutines)
 }
 
 // HasInnerErrors detects if nested or attached errors present

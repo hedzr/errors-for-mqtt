@@ -36,6 +36,7 @@ const (
 	ErrCodeConnectTimeout
 	ErrCodeUnauthorized
 	ErrCodeUnsupportedProtocolLevel
+	ErrCodeProtocolError
 	ErrCodeBadIO
 	ErrCodeErrors // generic nested errors
 	ErrCodeMqttStateWrong
@@ -44,6 +45,7 @@ const (
 	ErrCodePacketIdentifierExisted
 	ErrCodeBadTopicFilter
 	ErrCodeBadTopicName
+	ErrCodeBadSharedName
 	ErrCodePacketIncomplete
 	ErrCodeStateLoops
 	LASTERROR
