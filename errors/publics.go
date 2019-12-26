@@ -112,3 +112,26 @@ func Nest(err error, errs ...error) error {
 	}
 	return err
 }
+
+// DumpStacksAsString returns stack tracing information like debug.PrintStack()
+func DumpStacksAsString(allRoutines bool) string {
+	return errors.DumpStackAsString(allRoutines)
+}
+
+// HasInnerErrors detects if nested or attached errors present
+func HasInnerErrors(err error) (yes bool) {
+	return errors.HasInnerErrors(err)
+}
+
+// HasAttachedErrors detects if attached errors present
+func HasAttachedErrors(err error) (yes bool) {
+	return errors.HasAttachedErrors(err)
+}
+
+// HasWrappedError detects if nested or wrapped errors present
+//
+// nested error: ExtErr.inner
+// wrapped error: fmt.Errorf("... %w ...", err)
+func HasWrappedError(err error) (yes bool) {
+	return errors.HasWrappedError(err)
+}

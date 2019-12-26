@@ -12,7 +12,7 @@ func (e *MqttError) NoCannedError() bool {
 	return e.Number() == OK || e.InnerEmpty()
 }
 
-// InnerEmpty tests if any errors attached (nor nested) to `e` or not
+// HasAttachedErrors tests if any errors attached (nor nested) to `e` or not
 func (e *MqttError) InnerEmpty() bool {
 	return len(e.GetErrs()) == 0
 }

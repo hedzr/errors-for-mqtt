@@ -1,7 +1,5 @@
 package errors
 
-import "github.com/hedzr/errors"
-
 //
 //
 //
@@ -13,8 +11,9 @@ func New(msg string, args ...interface{}) *MqttError {
 }
 
 // NewTemplate ExtErr error object with string template and allows attach more nested errors
-func NewTemplate(tmpl string) *errors.ExtErr {
-	return errors.NewTemplate(tmpl)
+func NewTemplate(tmpl string) *MqttError {
+	e := &MqttError{}
+	return e.Template(tmpl)
 }
 
 // NewWithError MqttError error object with nested errors
