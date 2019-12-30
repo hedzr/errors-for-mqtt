@@ -10,6 +10,14 @@ func New(msg string, args ...interface{}) *MqttError {
 	return e.Msg(msg, args...)
 }
 
+// Wrap attaches an error object `err` into ExtErr.
+//
+// With go official model, the behavior is: fmt.Sprintf("...%w...", err)
+// In our model, `err` will be attached/wrapped into an ExtErr object.
+func Wrap(err error, format string, args ...interface{}) *MqttError {
+	return New(format, args...).Nest(err)
+}
+
 // NewTemplate ExtErr error object with string template and allows attach more nested errors
 func NewTemplate(tmpl string) *MqttError {
 	e := &MqttError{}

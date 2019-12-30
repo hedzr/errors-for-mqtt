@@ -1,4 +1,4 @@
-//go:generate stringer -type=CloseReason -output close_reason_string.go
+//go:generate stringer -type=CloseReason -output ext.close_reason_string.go
 
 package errors
 

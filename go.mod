@@ -4,4 +4,4 @@ go 1.13
 
 // require github.com/hedzr/errors v1.1.12
 
-require github.com/hedzr/errors v1.1.12
+require github.com/hedzr/errors v1.1.15
