@@ -53,19 +53,17 @@ func TextContains(err error, text string) bool {
 }
 
 // Attach attaches the errors into `err`
-func Attach(err error, errs ...error) error {
+func Attach(err error, errs ...error) {
 	if x, ok := err.(interface{ AttachIts(errors ...error) }); ok {
 		x.AttachIts(errs...)
 	}
-	return err
 }
 
 // Nest wraps/nests the errors into `err`
-func Nest(err error, errs ...error) error {
+func Nest(err error, errs ...error) {
 	if x, ok := err.(interface{ NestIts(errors ...error) }); ok {
 		x.NestIts(errs...)
 	}
-	return err
 }
 
 // DumpStacksAsString returns stack tracing information like debug.PrintStack()
