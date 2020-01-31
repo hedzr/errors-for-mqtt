@@ -1,7 +1,9 @@
 package errors
 
 import (
+	"fmt"
 	"github.com/hedzr/errors"
+	"io"
 	"log"
 	"strconv"
 	"strings"
@@ -96,15 +98,15 @@ func (e *MqttError) Error() string {
 // Coder could compile the error object with formatting args later.
 //
 // Note that `ExtErr.Template()` had been overrided here
-func (e *MqttError) Template(tmpl string) *MqttError {
+func (e *MqttError) Template(tmpl string) errors.Templater {
 	_ = e.CodedErr.Template(tmpl)
 	return e
 }
 
-// Format compiles the final msg with string template and args
+// Formatf compiles the final msg with string template and args
 //
 // Note that `ExtErr.Template()` had been overridden here
-func (e *MqttError) Format(args ...interface{}) *MqttError {
+func (e *MqttError) Formatf(args ...interface{}) errors.Templater {
 	_ = e.CodedErr.Format(args...)
 	return e
 }
@@ -141,4 +143,20 @@ func (e *MqttError) AttachIts(errors ...error) {
 // NestIts attaches the nested errors into CodedErr
 func (e *MqttError) NestIts(errors ...error) {
 	e.CodedErr.NestIts(errors...)
+}
+
+func (e *MqttError) Format(st fmt.State, verb rune) {
+	switch verb {
+	case 'v':
+		if st.Flag('+') {
+			io.WriteString(st, e.Error())
+			e.Stack().Format(st, verb)
+			return
+		}
+		fallthrough
+	case 's':
+		io.WriteString(st, e.Error())
+	case 'q':
+		fmt.Fprintf(st, "%q", e.Error())
+	}
 }
